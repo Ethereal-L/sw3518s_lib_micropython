@@ -86,5 +86,5 @@ class sw3518:
         rntc= ntc * 0.008/0.00008
         B = 3380                                                                           #取决于模块热敏B值
         temp = (1.0 / ((1.0 / B) * log( rntc / 10000) + (1.0 / (25 + 273.15))) - 273.15)   #此计算公式中默认是用的10k热敏电阻所以是rntc/10k
-        return temp
-
+        htemp = round(temp, 1)                                                             #温度保留一位小数
+        return htemp
