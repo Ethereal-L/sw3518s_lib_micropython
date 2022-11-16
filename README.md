@@ -4,6 +4,7 @@
 如果想使用其中某一函数示例代码：
 
 ```
+#rp2040
 import sw3518lib
 from machine import Pin, I2C
 
