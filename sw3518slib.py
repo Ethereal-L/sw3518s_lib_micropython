@@ -1,12 +1,5 @@
 #sw3518s芯片库
-#from machine import Pin, I2C
 from math import log
-
-#i2c = I2C(0, scl=Pin(1), sda=Pin(0), freq=400_000)
-#寄存器配置
-#QC_STATE      = const(0x06)
-#SYS_STATE0    = const(0x07)
-#SYS_STATE1    = const(0x08)
 
 
 class sw3518:
