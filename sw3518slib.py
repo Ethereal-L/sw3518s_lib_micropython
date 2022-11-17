@@ -1,6 +1,12 @@
 #sw3518s芯片库
+#from machine import Pin, I2C
 from math import log
 
+#i2c = I2C(0, scl=Pin(1), sda=Pin(0), freq=400_000)
+#寄存器配置
+#QC_STATE      = const(0x06)
+#SYS_STATE0    = const(0x07)
+#SYS_STATE1    = const(0x08)
 
 
 class sw3518:
@@ -54,31 +60,68 @@ class sw3518:
             #print(reg)
         return reg
     
+    
+    
+    def ac_state(self):
+        ac = self.i2c.readfrom_mem(60, 0x08, 1,addrsize=8)  #获取对应寄存器数据
+        ten = ord(ac)                                  #将Ascii码转换为十进制数
+        two = bin(ten)                                #十进制转二进制
+        #a = str(two)                                 #int转换str
+        reg_list = list(two)                          #将二进制数转换为列表方便后面读取比特位
+        #print(reg_list)
+        del reg_list[0: 2]                            #删除转换二进制自带的“0”和“b”
+        if len(reg_list) < 8:                         #自动转二进制不会往前补0
+            reg_list.insert(0, 0)
+        elif len(reg_list) < 8:
+            reg_list.insert(0, 0)
+        else:
+            pass
+        reg_list_new = list(map(int, reg_list))       #元素全部转换成int
+        #print(reg_list_new)
+        ac = reg_list_new[0:4]
+        #print(pd)
+        #reg = None
+        #将列表的数转换为十进制数
+        c = len(ac)-1
+        regac = 0
+        #print(c)
+        for r in ac:
+            t = r * 2**c
+            c -= 1
+            regac += t
+            #print(reg)
+        return regac
+    
+    
         
     def read_vin(self):
         self.i2c.writeto_mem(60, 0x13, b'\x02')                   #写0x13寄存器使能adcvin
         ascvin = self.i2c.readfrom_mem(60, 0x30, 1,addrsize=8)    #读取adcvin数据
         tenvin = ord(ascvin)                                 #转换数据
         vin = tenvin * 0.16
-        return vin
+        hvin = round(vin, 3)
+        return hvin
         
     def adc_vout(self):
         ascvout = self.i2c.readfrom_mem(60, 0x31, 1,addrsize=8)
         tenvout = ord(ascvout)                                 #转换数据
         vout    = tenvout * 0.096
-        return vout
+        hvout = round(vout, 3)
+        return hvout
         
     def adc_c_iout(self):
         asciout = self.i2c.readfrom_mem(60, 0x33, 1,addrsize=8)
         teniout = ord(asciout)
         c_iout  = teniout * 0.04
-        return c_iout
+        hc_iout = round(c_iout, 3)
+        return hc_iout
       
     def adc_a_iout(self):
         asciout = self.i2c.readfrom_mem(60, 0x34, 1,addrsize=8)
         teniout = ord(asciout)
         a_iout  = teniout * 0.04
-        return a_iout
+        ha_iout = round(a_iout, 3)
+        return ha_iout
 
     def temp(self):
         ascntc = self.i2c.readfrom_mem(60, 0x37, 1,addrsize=8)
