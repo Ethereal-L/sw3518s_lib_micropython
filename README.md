@@ -1,5 +1,5 @@
 # sw3518s_lib_micropython
-智融的sw3518s芯片的micropython函数库
+智融的sw3518s芯片的micropython模块
 只有简单的读取功能，i2c控制函数还没写。
 如果想使用其中某一函数示例代码：
 
